@@ -15,7 +15,6 @@ abstract class Usuario {
         this.senha = senha;
     }
 
-    // Getters and Setters with validation
     public int getId() { return id; }
     public String getNome() { return nome; }
     public void setNome(String nome) {
@@ -25,10 +24,10 @@ abstract class Usuario {
         this.nome = nome;
     }
     public String getLogin() { return login; }
-    public String getSenha() { return senha; } // Senha não deve ser alterada diretamente
+    public String getSenha() { return senha; } 
 
     public boolean autenticar(String providedLogin, String providedSenha) {
-        return this.login.equals(providedLogin) && this.senha.equals(providedSenha); // Em produção, usar hash
+        return this.login.equals(providedLogin) && this.senha.equals(providedSenha); 
     }
 }
 
@@ -38,17 +37,14 @@ class Administrador extends Usuario {
     }
 
     public void cadastrarArea(AreaAgricola area) {
-        // Lógica para cadastrar área no DB
         AreaAgricolaDAO.cadastrar(area);
     }
 
     public void cadastrarDrone(Drone drone) {
-        // Lógica para cadastrar drone no DB
         DroneDAO.cadastrar(drone);
     }
 
     public Relatorio gerarRelatorio(AreaAgricola area) {
-        // Lógica para gerar relatório do DB
         return RelatorioDAO.gerarParaArea(area.getId());
     }
 }
@@ -79,7 +75,7 @@ class AreaAgricola {
         this.tipoCultivo = tipoCultivo;
     }
 
-    // Getters
+    
     public int getId() { return id; }
     public double getTamanho() { return tamanho; }
     public String getLocalizacao() { return localizacao; }
@@ -103,7 +99,6 @@ class Drone {
         return bateria >= 20 && !sensoresDisponiveis.isEmpty(); // Exemplo de checklist
     }
 
-    // Getters
     public String getId() { return id; }
     public List<String> getSensoresDisponiveis() { return sensoresDisponiveis; }
     public String getStatus() { return status; }
@@ -128,16 +123,13 @@ class MissaoVoo {
     }
 
     public boolean validarSobreposicao() {
-        // Consultar DB para verificar sobreposições
         return MissaoVooDAO.verificarSobreposicao(this.droneId, this.data);
     }
 
     public void executarMissao() {
-        // Simular execução e coletar dados
         if (!DroneDAO.obterDrone(this.droneId).verificarChecklist()) {
             throw new IllegalStateException("Checklist falhou");
         }
-        // ... lógica de execução
         DadosColetados dados = new DadosColetados(/* params */);
         if (!dados.validarDados()) {
             throw new IllegalStateException("Dados inválidos");
@@ -145,7 +137,6 @@ class MissaoVoo {
         DadosColetadosDAO.cadastrar(dados, this.id);
     }
 
-    // Getters
     public int getId() { return id; }
 }
 
@@ -170,7 +161,6 @@ class DadosColetados {
         return temperatura >= -50 && temperatura <= 50 && umidade >= 0 && umidade <= 100 && !imagens.isEmpty();
     }
 
-    // Getters
     public int getId() { return id; }
 }
 
@@ -186,12 +176,10 @@ class Relatorio {
     }
 
     public String gerar() {
-        // Lógica para formatar relatório
         return "Relatório: " + ultimasMedicoes;
     }
 }
 
-// Exemplo de DAO com integração ao BD e PreparedStatements
 class ConnectionFactory {
     private static final String URL = "jdbc:postgresql://localhost:5432/drone_db";
     private static final String USER = "user";
@@ -204,7 +192,7 @@ class ConnectionFactory {
 
 class UsuarioDAO {
     public static boolean autenticar(String login, String senha) {
-        String sql = "SELECT * FROM USUARIO WHERE login = ? AND senha = ?"; // Senha deve ser hashed
+        String sql = "SELECT * FROM USUARIO WHERE login = ? AND senha = ?"; 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, login);
@@ -243,17 +231,15 @@ class DroneDAO {
             stmt.setString(2, drone.getStatus());
             stmt.setInt(3, drone.getBateria());
             stmt.executeUpdate();
-            // Inserir sensores em DRONE_SENSOR
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static Drone obterDrone(String id) {
-        // Implementar consulta
-        return null; // Placeholder
+   /* public static Drone obterDrone(String id) {
+        return null;
     }
-}
+}*/
 
 class MissaoVooDAO {
     public static void cadastrar(MissaoVoo missao) {
@@ -266,7 +252,6 @@ class MissaoVooDAO {
             stmt.setString(4, missao.getDroneId());
             stmt.setInt(5, missao.getAreaId());
             stmt.executeUpdate();
-            // Inserir sensores em MISSAO_SENSOR
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -299,21 +284,18 @@ class DadosColetadosDAO {
             stmt.setString(4, dados.getPragas());
             stmt.setInt(5, missaoId);
             stmt.executeUpdate();
-            // Inserir imagens em DADOS_IMAGEM
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
 
-class RelatorioDAO {
+/*class RelatorioDAO {
     public static Relatorio gerarParaArea(int areaId) {
-        // Implementar consulta complexa para últimas medições e voos
-        return null; // Placeholder
+        return null;
     }
-}
+}*/
 
-// Exemplo de uso baseado no diagrama de sequência
 public class Main {
     public static void main(String[] args) {
         // Autenticação
@@ -322,7 +304,7 @@ public class Main {
             MissaoVoo missao = new MissaoVoo(1, new Date(), Arrays.asList("temp"), "agendada", "drone1", 1);
             op.agendarMissao(missao);
             missao.executarMissao();
-            // Gerar relatório etc.
         }
     }
+
 }
