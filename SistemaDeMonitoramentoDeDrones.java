@@ -238,8 +238,8 @@ class DroneDAO {
 
    /* public static Drone obterDrone(String id) {
         return null;
-    }
-}*/
+    }*/
+}
 
 class MissaoVooDAO {
     public static void cadastrar(MissaoVoo missao) {
@@ -293,8 +293,8 @@ class DadosColetadosDAO {
 /*class RelatorioDAO {
     public static Relatorio gerarParaArea(int areaId) {
         return null;
-    }
-}*/
+    }*/
+}
 
 public class Main {
     public static void main(String[] args) {
@@ -308,3 +308,4 @@ public class Main {
     }
 
 }
+
