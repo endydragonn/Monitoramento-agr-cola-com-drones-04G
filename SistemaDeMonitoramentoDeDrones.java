@@ -293,8 +293,8 @@ class DadosColetadosDAO {
 /*class RelatorioDAO {
     public static Relatorio gerarParaArea(int areaId) {
         return null;
-    }*/
-}
+    }
+}*/
 
 public class Main {
     public static void main(String[] args) {
@@ -308,4 +308,5 @@ public class Main {
     }
 
 }
+
 
