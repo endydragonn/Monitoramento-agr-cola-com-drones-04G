@@ -1,8 +1,6 @@
 
--- Criação do banco de dados (executar como superuser, ex.: postgres)
+-- Criação do banco de dados
 CREATE DATABASE drone_db;
-
--- Conectar ao banco: \c drone_db
 
 -- Criação das tabelas
 
@@ -10,7 +8,7 @@ CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     login VARCHAR(255) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL -- Deve ser hashed no app; nunca logar senha!
+    senha VARCHAR(255) NOT NULL 
 );
 
 CREATE TABLE area_agricola (
@@ -34,7 +32,7 @@ CREATE TABLE drone_sensor (
 
 CREATE TABLE missao_voo (
     id SERIAL PRIMARY KEY,
-    data DATE NOT NULL, -- Considerar TIMESTAMP se precisar de hora para sobreposições precisas
+    data DATE NOT NULL, 
     status VARCHAR(50) NOT NULL,
     drone_id VARCHAR(50) REFERENCES drone(id) ON DELETE RESTRICT,
     area_id INT REFERENCES area_agricola(id) ON DELETE RESTRICT
@@ -56,14 +54,12 @@ CREATE TABLE dados_coletados (
 
 CREATE TABLE dados_imagem (
     dados_id INT REFERENCES dados_coletados(id) ON DELETE CASCADE,
-    imagem VARCHAR(255) NOT NULL, -- Caminho ou URL da imagem
+    imagem VARCHAR(255) NOT NULL, -- URL da imagem
     PRIMARY KEY (dados_id, imagem)
 );
 
--- Criação do role para o app (princípio do mínimo privilégio)
-CREATE ROLE app_user WITH LOGIN PASSWORD 'secure_password'; -- Alterar senha em produção
 
--- Conceder permissões mínimas: SELECT, INSERT, UPDATE (sem DELETE, para evitar remoções acidentais)
+-- Conceder permissões mínimas: SELECT, INSERT, UPDATE
 GRANT SELECT, INSERT, UPDATE ON usuario TO app_user;
 GRANT SELECT, INSERT, UPDATE ON area_agricola TO app_user;
 GRANT SELECT, INSERT, UPDATE ON drone TO app_user;
@@ -72,6 +68,5 @@ GRANT SELECT, INSERT, UPDATE ON missao_voo TO app_user;
 GRANT SELECT, INSERT, UPDATE ON missao_sensor TO app_user;
 GRANT SELECT, INSERT, UPDATE ON dados_coletados TO app_user;
 GRANT SELECT, INSERT, UPDATE ON dados_imagem TO app_user;
-
--- Permissões para sequências (para SERIAL)
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user;
+
