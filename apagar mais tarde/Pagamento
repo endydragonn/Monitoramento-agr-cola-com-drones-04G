@@ -1,0 +1,82 @@
+// Abstract class Pagamento
+public abstract class Pagamento {
+    protected double valor;
+
+    public Pagamento(double valor) {
+        if (valor <= 0) {
+            throw new IllegalArgumentException("Valor do pagamento deve ser positivo.");
+        }
+        this.valor = valor;
+    }
+
+    public abstract void processar();
+}
+
+// Interface Autenticavel
+public interface Autenticavel {
+    boolean autenticar(String token);
+}
+
+// Class Pix extending Pagamento and implementing Autenticavel
+public class Pix extends Pagamento implements Autenticavel {
+    private String chavePix;
+
+    public Pix(double valor, String chavePix) {
+        super(valor);
+        if (chavePix == null || chavePix.isBlank()) {
+            throw new IllegalArgumentException("Chave PIX inválida.");
+        }
+        // Validação adicional de formato (exemplo simplificado para e-mail ou telefone)
+        boolean formatoValido = chavePix.contains("@") || chavePix.matches("^\\+?\\d{10,14}$");
+        if (!formatoValido) {
+            throw new IllegalArgumentException("Formato da chave PIX inválido.");
+        }
+        this.chavePix = chavePix;
+    }
+
+    @Override
+    public void processar() {
+        System.out.printf("Processando pagamento PIX de R$ %.2f com chave %s%n", valor, chavePix);
+    }
+
+    @Override
+    public boolean autenticar(String token) {
+        // Valida token de 6 dígitos numéricos
+        return token != null && token.matches("^\\d{6}$");
+    }
+}
+
+// Class CartaoCredito extending Pagamento and implementing Autenticavel
+public class CartaoCredito extends Pagamento implements Autenticavel {
+    private String numeroCartao;
+    private String cvv;
+    private String dataExpiracao; // Formato MM/AA
+
+    public CartaoCredito(double valor, String numeroCartao, String cvv, String dataExpiracao) {
+        super(valor);
+        if (numeroCartao == null || !numeroCartao.matches("^\\d{16}$")) {
+            throw new IllegalArgumentException("Número do cartão inválido (deve ser 16 dígitos).");
+        }
+        if (cvv == null || !cvv.matches("^\\d{3}$")) {
+            throw new IllegalArgumentException("CVV inválido (deve ser 3 dígitos).");
+        }
+        if (dataExpiracao == null || !dataExpiracao.matches("^(0[1-9]|1[0-2])/\\d{2}$")) {
+            throw new IllegalArgumentException("Data de expiração inválida (formato MM/AA).");
+        }
+        this.numeroCartao = numeroCartao;
+        this.cvv = cvv;
+        this.dataExpiracao = dataExpiracao;
+    }
+
+    @Override
+    public void processar() {
+        System.out.printf("Processando pagamento com Cartão de Crédito de R$ %.2f (cartão terminando em %s)%n", 
+                          valor, numeroCartao.substring(12));
+    }
+
+    @Override
+    public boolean autenticar(String token) {
+        // Valida token de 6 dígitos numéricos
+        return token != null && token.matches("^\\d{6}$");
+    }
+}
