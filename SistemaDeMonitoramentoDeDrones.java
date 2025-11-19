@@ -2,7 +2,15 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-abstract class Usuario {
+interface Autenticavel {
+    boolean autenticar(String login, String senha);
+}
+
+interface Validavel {
+    boolean validar();
+}
+
+abstract class Usuario implements Autenticavel {
     private int id;
     private String nome;
     private String login;
@@ -15,6 +23,7 @@ abstract class Usuario {
         this.senha = senha;
     }
 
+    // Getters and Setters with validation
     public int getId() { return id; }
     public String getNome() { return nome; }
     public void setNome(String nome) {
@@ -24,10 +33,11 @@ abstract class Usuario {
         this.nome = nome;
     }
     public String getLogin() { return login; }
-    public String getSenha() { return senha; } 
+    public String getSenha() { return senha; } // Senha não deve ser alterada diretamente
 
+    @Override
     public boolean autenticar(String providedLogin, String providedSenha) {
-        return this.login.equals(providedLogin) && this.senha.equals(providedSenha); 
+        return this.login.equals(providedLogin) && this.senha.equals(providedSenha); // Em produção, usar hash
     }
 }
 
@@ -37,14 +47,17 @@ class Administrador extends Usuario {
     }
 
     public void cadastrarArea(AreaAgricola area) {
+        // Lógica para cadastrar área no DB
         AreaAgricolaDAO.cadastrar(area);
     }
 
     public void cadastrarDrone(Drone drone) {
+        // Lógica para cadastrar drone no DB
         DroneDAO.cadastrar(drone);
     }
 
     public Relatorio gerarRelatorio(AreaAgricola area) {
+        // Lógica para gerar relatório do DB
         return RelatorioDAO.gerarParaArea(area.getId());
     }
 }
@@ -75,7 +88,7 @@ class AreaAgricola {
         this.tipoCultivo = tipoCultivo;
     }
 
-    
+    // Getters
     public int getId() { return id; }
     public double getTamanho() { return tamanho; }
     public String getLocalizacao() { return localizacao; }
@@ -99,13 +112,14 @@ class Drone {
         return bateria >= 20 && !sensoresDisponiveis.isEmpty(); // Exemplo de checklist
     }
 
+    // Getters
     public String getId() { return id; }
     public List<String> getSensoresDisponiveis() { return sensoresDisponiveis; }
     public String getStatus() { return status; }
     public int getBateria() { return bateria; }
 }
 
-class MissaoVoo {
+class MissaoVoo implements Validavel {
     private int id;
     private Date data;
     private List<String> sensoresUtilizados;
@@ -123,24 +137,38 @@ class MissaoVoo {
     }
 
     public boolean validarSobreposicao() {
+        // Consultar DB para verificar sobreposições
         return MissaoVooDAO.verificarSobreposicao(this.droneId, this.data);
     }
 
     public void executarMissao() {
-        if (!DroneDAO.obterDrone(this.droneId).verificarChecklist()) {
+        Drone drone = DroneDAO.obterDrone(this.droneId);
+        if (!drone.verificarChecklist()) {
             throw new IllegalStateException("Checklist falhou");
         }
-        DadosColetados dados = new DadosColetados(/* params */);
-        if (!dados.validarDados()) {
+        // Simular dados coletados
+        List<String> imagens = Arrays.asList("img1.jpg", "img2.jpg");
+        DadosColetados dados = new DadosColetados(1, imagens, 25.0, 60.0, "Sem pragas", this.id);
+        if (!dados.validar()) {
             throw new IllegalStateException("Dados inválidos");
         }
         DadosColetadosDAO.cadastrar(dados, this.id);
     }
 
+    @Override
+    public boolean validar() {
+        return !sensoresUtilizados.isEmpty() && data != null;
+    }
+
+    // Getters
     public int getId() { return id; }
+    public Date getData() { return data; }
+    public String getDroneId() { return droneId; }
+    public int getAreaId() { return areaId; }
+    public String getStatus() { return status; }
 }
 
-class DadosColetados {
+class DadosColetados implements Validavel {
     private int id;
     private List<String> imagens;
     private double temperatura;
@@ -161,7 +189,16 @@ class DadosColetados {
         return temperatura >= -50 && temperatura <= 50 && umidade >= 0 && umidade <= 100 && !imagens.isEmpty();
     }
 
+    @Override
+    public boolean validar() {
+        return validarDados();
+    }
+
+    // Getters
     public int getId() { return id; }
+    public double getTemperatura() { return temperatura; }
+    public double getUmidade() { return umidade; }
+    public String getPragas() { return pragas; }
 }
 
 class Relatorio {
@@ -176,10 +213,12 @@ class Relatorio {
     }
 
     public String gerar() {
-        return "Relatório: " + ultimasMedicoes;
+        // Lógica para formatar relatório
+        return "Relatório: " + ultimasMedicoes + "\nVoos: " + voosRealizados.size();
     }
 }
 
+// Exemplo de DAO com integração ao BD e PreparedStatements
 class ConnectionFactory {
     private static final String URL = "jdbc:postgresql://localhost:5432/drone_db";
     private static final String USER = "user";
@@ -192,7 +231,7 @@ class ConnectionFactory {
 
 class UsuarioDAO {
     public static boolean autenticar(String login, String senha) {
-        String sql = "SELECT * FROM USUARIO WHERE login = ? AND senha = ?"; 
+        String sql = "SELECT * FROM usuario WHERE login = ? AND senha = ?"; // Senha deve ser hashed
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, login);
@@ -208,7 +247,7 @@ class UsuarioDAO {
 
 class AreaAgricolaDAO {
     public static void cadastrar(AreaAgricola area) {
-        String sql = "INSERT INTO AREA_AGRICOLA (id, tamanho, localizacao, tipoCultivo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO area_agricola (id, tamanho, localizacao, tipo_cultivo) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, area.getId());
@@ -224,26 +263,59 @@ class AreaAgricolaDAO {
 
 class DroneDAO {
     public static void cadastrar(Drone drone) {
-        String sql = "INSERT INTO DRONE (id, status, bateria) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO drone (id, status, bateria) VALUES (?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, drone.getId());
             stmt.setString(2, drone.getStatus());
             stmt.setInt(3, drone.getBateria());
             stmt.executeUpdate();
+            // Inserir sensores em drone_sensor
+            for (String sensor : drone.getSensoresDisponiveis()) {
+                String sensorSql = "INSERT INTO drone_sensor (drone_id, sensor) VALUES (?, ?)";
+                try (PreparedStatement sensorStmt = conn.prepareStatement(sensorSql)) {
+                    sensorStmt.setString(1, drone.getId());
+                    sensorStmt.setString(2, sensor);
+                    sensorStmt.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-   /* public static Drone obterDrone(String id) {
-        return null;
-    }*/
+    public static Drone obterDrone(String id) {
+        String sql = "SELECT * FROM drone WHERE id = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String status = rs.getString("status");
+                int bateria = rs.getInt("bateria");
+                // Obter sensores
+                List<String> sensores = new ArrayList<>();
+                String sensorSql = "SELECT sensor FROM drone_sensor WHERE drone_id = ?";
+                try (PreparedStatement sensorStmt = conn.prepareStatement(sensorSql)) {
+                    sensorStmt.setString(1, id);
+                    ResultSet sensorRs = sensorStmt.executeQuery();
+                    while (sensorRs.next()) {
+                        sensores.add(sensorRs.getString("sensor"));
+                    }
+                }
+                return new Drone(id, sensores, status, bateria);
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
 
 class MissaoVooDAO {
     public static void cadastrar(MissaoVoo missao) {
-        String sql = "INSERT INTO MISSAO_VOO (id, data, status, drone_id, area_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO missao_voo (id, data, status, drone_id, area_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, missao.getId());
@@ -252,13 +324,22 @@ class MissaoVooDAO {
             stmt.setString(4, missao.getDroneId());
             stmt.setInt(5, missao.getAreaId());
             stmt.executeUpdate();
+            // Inserir sensores em missao_sensor
+            for (String sensor : missao.sensoresUtilizados) {
+                String sensorSql = "INSERT INTO missao_sensor (missao_id, sensor) VALUES (?, ?)";
+                try (PreparedStatement sensorStmt = conn.prepareStatement(sensorSql)) {
+                    sensorStmt.setInt(1, missao.getId());
+                    sensorStmt.setString(2, sensor);
+                    sensorStmt.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public static boolean verificarSobreposicao(String droneId, Date data) {
-        String sql = "SELECT COUNT(*) FROM MISSAO_VOO WHERE drone_id = ? AND data = ?";
+        String sql = "SELECT COUNT(*) FROM missao_voo WHERE drone_id = ? AND data = ?";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, droneId);
@@ -275,7 +356,7 @@ class MissaoVooDAO {
 
 class DadosColetadosDAO {
     public static void cadastrar(DadosColetados dados, int missaoId) {
-        String sql = "INSERT INTO DADOS_COLETADOS (id, temperatura, umidade, pragas, missao_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO dados_coletados (id, temperatura, umidade, pragas, missao_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, dados.getId());
@@ -284,29 +365,69 @@ class DadosColetadosDAO {
             stmt.setString(4, dados.getPragas());
             stmt.setInt(5, missaoId);
             stmt.executeUpdate();
+            // Inserir imagens em dados_imagem
+            for (String imagem : dados.imagens) {
+                String imgSql = "INSERT INTO dados_imagem (dados_id, imagem) VALUES (?, ?)";
+                try (PreparedStatement imgStmt = conn.prepareStatement(imgSql)) {
+                    imgStmt.setInt(1, dados.getId());
+                    imgStmt.setString(2, imagem);
+                    imgStmt.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
 
-/*class RelatorioDAO {
+class RelatorioDAO {
     public static Relatorio gerarParaArea(int areaId) {
-        return null;
+        String medicoes = ""; // Placeholder para query
+        List<MissaoVoo> voos = new ArrayList<>();
+        // Query exemplo para últimas medições
+        String sql = "SELECT d.temperatura, d.umidade FROM dados_coletados d JOIN missao_voo m ON d.missao_id = m.id WHERE m.area_id = ? ORDER BY m.data DESC LIMIT 1";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, areaId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                medicoes = "Temp: " + rs.getDouble("temperatura") + ", Umid: " + rs.getDouble("umidade");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // Query para voos
+        String voosSql = "SELECT * FROM missao_voo WHERE area_id = ? ORDER BY data DESC";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(voosSql)) {
+            stmt.setInt(1, areaId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                // Simples, sem sensores por agora
+                MissaoVoo voo = new MissaoVoo(rs.getInt("id"), rs.getDate("data"), new ArrayList<>(), rs.getString("status"), rs.getString("drone_id"), areaId);
+                voos.add(voo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new Relatorio(medicoes, voos, areaId);
     }
-}*/
+}
 
+// Exemplo de uso baseado no diagrama de sequência
 public class Main {
     public static void main(String[] args) {
         // Autenticação
         if (UsuarioDAO.autenticar("operador", "senha123")) {
             OperadorDrone op = new OperadorDrone(1, "Op", "operador", "senha123");
-            MissaoVoo missao = new MissaoVoo(1, new Date(), Arrays.asList("temp"), "agendada", "drone1", 1);
+            MissaoVoo missao = new MissaoVoo(1, new Date(), Arrays.asList("temp", "umid"), "agendada", "drone1", 1);
             op.agendarMissao(missao);
             missao.executarMissao();
+            // Gerar relatório
+            AreaAgricola area = new AreaAgricola(1, 100.0, "Fazenda X", "Milho");
+            Administrador admin = new Administrador(2, "Admin", "admin", "admin123");
+            Relatorio rel = admin.gerarRelatorio(area);
+            System.out.println(rel.gerar());
         }
     }
-
 }
-
-
