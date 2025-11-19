@@ -90,7 +90,7 @@ Complementa a sequência, focando em estrutura de links e mensagens numeradas ("
 ### Diagrama de Estados
 Modela o ciclo de vida de MissaoVoo, com estados, transições e guardas para segurança ("Aula_13_Diagrama de Estados.pdf"). Prevê estados inválidos (ex.: Executando sem checklist) usando UMLsec.
 
-<img width="2613" height="1614" alt="Diagrama_de_estados" src="https://github.com/user-attachments/assets/296a1626-4bd3-4338-88ce-37c528081daa" />
+<img width="2613" height="1614" alt="Diagrama_de_estados" src="https://github.com/user-attachments/assets/c5c63393-8e15-44b8-8059-81cef509c87e" />
 
 ## Princípios de Orientação a Objetos e CRC
 Usando CRC ("Responsabilidade_OO_CRC_Segurança.pdf"), cada classe tem responsabilidades coesas:
