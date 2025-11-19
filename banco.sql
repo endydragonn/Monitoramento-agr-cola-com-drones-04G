@@ -1,14 +1,12 @@
-
 -- Criação do banco de dados
 CREATE DATABASE drone_db;
 
 -- Criação das tabelas
-
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     login VARCHAR(255) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL 
+    senha VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE area_agricola (
@@ -32,7 +30,7 @@ CREATE TABLE drone_sensor (
 
 CREATE TABLE missao_voo (
     id SERIAL PRIMARY KEY,
-    data DATE NOT NULL, 
+    data DATE NOT NULL,
     status VARCHAR(50) NOT NULL,
     drone_id VARCHAR(50) REFERENCES drone(id) ON DELETE RESTRICT,
     area_id INT REFERENCES area_agricola(id) ON DELETE RESTRICT
@@ -58,7 +56,6 @@ CREATE TABLE dados_imagem (
     PRIMARY KEY (dados_id, imagem)
 );
 
-
 -- Conceder permissões mínimas: SELECT, INSERT, UPDATE
 GRANT SELECT, INSERT, UPDATE ON usuario TO app_user;
 GRANT SELECT, INSERT, UPDATE ON area_agricola TO app_user;
@@ -69,4 +66,3 @@ GRANT SELECT, INSERT, UPDATE ON missao_sensor TO app_user;
 GRANT SELECT, INSERT, UPDATE ON dados_coletados TO app_user;
 GRANT SELECT, INSERT, UPDATE ON dados_imagem TO app_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user;
-
