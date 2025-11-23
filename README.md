@@ -17,12 +17,10 @@
    - [Diagrama de Estados](#diagrama-de-estados)
    - [Integração com Banco de Dados (Modelo ER)](#integração-com-banco-de-dados-modelo-er)
 8. [Princípios de Orientação a Objetos e CRC](#princípios-de-orientação-a-objetos-e-crc)
-9. [Implementação em Java](#implementação-em-java)
-10. [Banco de Dados Relacional](#banco-de-dados-relacional)
-11. [Segurança by Design](#segurança-by-design)
-12. [Testes e Simulações](#testes-e-simulações)
-13. [Conclusão](#conclusão)
-14. [Referências](#referências)
+9. [Segurança by Design](#segurança-by-design)
+10. [Testes e Simulações](#testes-e-simulações)
+11. [Conclusão](#conclusão)
+12. [Referências](#referências)
 
 ## Introdução
 Este documento detalha o projeto de software para um sistema de monitoramento agrícola utilizando drones, desenvolvido como parte da disciplina de Projeto de Software na Universidade Presbiteriana Mackenzie, sob orientação do Prof. Dr. Rodrigo Silva. O projeto aborda desafios reais enfrentados por cooperativas rurais no Brasil, onde o monitoramento manual de plantações é ineficiente, demorado e suscetível a erros. Utilizando drones para sobrevoos periódicos, o sistema coleta dados ambientais (como temperatura, umidade e detecção de pragas) e imagens, facilitando análises e decisões agronômicas.
