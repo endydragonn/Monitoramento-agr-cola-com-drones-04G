@@ -17,8 +17,8 @@
    - [Diagrama de Estados](#diagrama-de-estados)
    - [Integração com Banco de Dados (Modelo ER)](#integração-com-banco-de-dados-modelo-er)
 8. [Princípios de Orientação a Objetos e CRC](#princípios-de-orientação-a-objetos-e-crc)
-9. [Segurança by Design](#segurança-by-design)
-10. [Testes e Simulações](#testes-e-simulações)
+9. [Sistema De Monitoramento De Drones](##-Resumo-do-SistemaDeMonitoramentoDeDrones.java)
+10. [Banco de dados](##-Resumo-do-Banco.sql)
 11. [Conclusão](#conclusão)
 12. [Referências](#referências)
 
@@ -65,26 +65,25 @@ Adotamos uma abordagem incremental:
 5. Testes simulados no método Main.
 
 ## Modelagem em UML
-Os diagramas feito em uml se complementam para servir como guia para o sistema.
 
 ### Diagrama de Classes
-Representa a estrutura estática, com classes, atributos, operações e relacionamentos. Usa abstrações (classes abstratas como Usuario) e interfaces (Autenticavel, Validavel) para contratos restritos e validação de parâmetros, prevenindo falhas . Exemplos: herança para polimorfismo em usuários; associações para missões.
+Representa a estrutura estática, com classes, atributos, operações e relacionamentos. Usa abstrações e interfaces para contratos restritos e validação de parâmetros, prevenindo falhas.
 
 <img width="2613" height="1614" alt="Diagrama_de_classe" src="https://github.com/user-attachments/assets/18b4b6ce-d67a-47b4-92b3-9b9277e6326c" />
 
 ### Diagrama de Sequência
-Mostra interações temporais entre objetos para agendamento e execução de missões . Inclui atores (OperadorDrone), objetos e mensagens com alternativas para validações de segurança.
+Mostra interações temporais entre objetos. Inclui atores, objetos e mensagens com validações de segurança.
 
 <img width="2613" height="1614" alt="Diagrama_de_sequencia" src="https://github.com/user-attachments/assets/bfadba0b-8d2c-47f0-bb35-afc732847814" />
 
-### Diagrama de Sequência + Colaboração
-Complementa a sequência, focando em estrutura de links e mensagens numeradas . Enfatiza segurança na troca de mensagens, validando dados para evitar exposições.
+### Diagrama de Colaboração
+Complementa o diagrama de sequência, focando em estrutura de links e mensagens numeradas. Enfatizando a segurança na troca de mensagens e validando dados para evitar exposições.
 
 <img width="2613" height="1614" alt="Diagrama_Integração_ Sequencia_Colaboração" src="https://github.com/user-attachments/assets/69def96e-db48-478b-98aa-207a2651b955" />
 
 
 ### Diagrama de Estados
-Modela o ciclo de vida de MissaoVoo, com estados, transições e guardas para segurança . Prevê estados inválidos (ex.: Executando sem checklist) usando UMLsec.
+Modela o ciclo de vida com estados, transições e guardas para segurança, além de Prevêr estados inválidos (ex.: Executando sem checklist).
 
 <img width="2613" height="1614" alt="Diagrama_de_estados" src="https://github.com/user-attachments/assets/c5c63393-8e15-44b8-8059-81cef509c87e" />
 
@@ -94,16 +93,72 @@ Usando CRC , cada classe tem responsabilidades coesas:
 - **MissaoVoo**: Saber dados da missão; fazer validação e execução (colabora com Drone e DadosColetados).
 Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Fronteiras (Main para interações).
 
+## Resumo do SistemaDeMonitoramentoDeDrones.java
 
+### Interface Autenticavel
+- Define um contrato para autenticação de usuários, garantindo que apenas credenciais válidas permitam acesso ao sistema.
 
-## Medidas de segurança no codigo
-- Encapsulamento: Senhas privadas.
-- Validações: Nos setters e métodos.
-- Prevenção de Injeções: PreparedStatements.
-- Estados Seguros: Checagens em transições (ex.: checklist).
+### Interface Validavel
+- Estabelece um padrão para validação de objetos, ajudando a assegurar que dados e estados sejam consistentes antes de operações críticas.
 
-## Testes e Simulações
-No Main, simule autenticação, agendamento e execução. : Imagine uma "cena" onde drone (herói) protege plantação (fortaleza) de pragas.
+### Classe Usuario (abstrata)
+- Representa usuários genéricos do sistema, fornecendo mecanismos básicos para gerenciamento de credenciais e autenticação segura.
+
+### Classe Administrador (herda de Usuario)
+- Permite que administradores cadastrem áreas agrícolas e drones, além de gerarem relatórios, facilitando a administração e análise de dados.
+
+### Classe OperadorDrone (herda de Usuario)
+- Habilita operadores a agendarem missões de voo, com verificações para evitar conflitos, promovendo eficiência operacional.
+
+### Classe AreaAgricola
+- Modela áreas agrícolas, armazenando informações essenciais para planejamento e monitoramento de cultivos.
+
+### Classe Drone
+- Representa drones, incluindo verificações de prontidão para voos, garantindo que equipamentos estejam aptos para missões.
+
+### Classe MissaoVoo (implementa Validavel)
+- Gerencia missões de voo, validando condições e executando coletas de dados, otimizando o processo de monitoramento.
+
+### Classe DadosColetados (implementa Validavel)
+- Armazena dados ambientais coletados durante missões, com validações para manter a integridade das informações.
+
+### Classe Relatorio
+- Gera resumos de medições e voos, auxiliando na tomada de decisões agronômicas baseadas em dados recentes.
+
+### Classe ConnectionFactory
+- Fornece conexões seguras ao banco de dados, facilitando a integração entre a aplicação e o armazenamento persistente.
+
+### Classe UsuarioDAO
+- Lida com autenticação de usuários no banco de dados, promovendo acesso controlado e seguro.
+
+### Classe AreaAgricolaDAO
+- Gerencia o cadastro de áreas agrícolas no banco, assegurando persistência de dados geográficos e de cultivo.
+
+### Classe DroneDAO
+- Cuida do registro e recuperação de drones e seus sensores, suportando o gerenciamento de frota.
+
+### Classe MissaoVooDAO
+- Administra o agendamento de missões e verificações de sobreposições, evitando conflitos operacionais.
+
+### Classe DadosColetadosDAO
+- Registra dados coletados e imagens associadas, preservando evidências de monitoramentos.
+
+### Classe RelatorioDAO
+- Extrai dados para relatórios, fornecendo insights sobre áreas específicas.
+
+### Classe Main
+- Demonstra o fluxo do sistema através de simulações, ilustrando como componentes interagem em cenários reais.
+
+## Resumo do Banco.sql
+
+### Criação do Banco de Dados
+- Estabelece o banco de dados principal, servindo como repositório central para todos os dados do sistema.
+
+### Criação das Tabelas
+- Define estruturas para usuários, áreas agrícolas, drones, sensores, missões de voo, dados coletados e imagens, garantindo organização e relacionamentos lógicos entre entidades.
+
+### Concessão de Permissões
+- Atribui acessos mínimos a um usuário de aplicação, promovendo segurança ao limitar operações a leitura, inserção e atualização essenciais.
 
 ## Conclusão
 O projeto integra modelagem UML com implementação com foco em seguraça, voltado a monitoramento agrícola baseado em drones.
