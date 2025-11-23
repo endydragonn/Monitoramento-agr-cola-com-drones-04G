@@ -17,8 +17,6 @@
 7. [Princípios de Orientação a Objetos e CRC](#princípios-de-orientação-a-objetos-e-crc)
 8. [Resumo do SistemaDeMonitoramentoDeDrones.java](#resumo-do-sistemademonitoramentodedronesjava)
 9. [Resumo do Banco.sql](#resumo-do-bancosql)
-10. [Conclusão](#conclusão)
-11. [Referências](#referências)
 
 ## Introdução
 Esse é um projeto sobre um sistema de monitoramento agrícola utilizando drones. O projeto aborda desafios reais enfrentados por cooperativas rurais, onde o monitoramento manual de plantações é ineficiente, demorado e suscetível a erros. Utilizando drones para sobrevoos periódicos, o sistema coleta dados ambientais (como temperatura, umidade e detecção de pragas) e imagens, facilitando análises e decisões agronômicas.
@@ -116,6 +114,8 @@ Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Front
 #### Classe ConnectionFactory
 - Fornece conexões seguras ao banco de dados, facilitando a integração entre a aplicação e o armazenamento persistente.
 
+### Classes DAO (Data Access Object)
+
 #### Classe UsuarioDAO
 - Lida com autenticação de usuários no banco de dados, promovendo acesso controlado e seguro.
 
@@ -134,8 +134,8 @@ Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Front
 #### Classe RelatorioDAO
 - Extrai dados para relatórios, fornecendo insights sobre áreas específicas.
 
-#### Classe Main
-- Demonstra o fluxo do sistema através de simulações, ilustrando como componentes interagem em cenários reais.
+### Classe Main
+- Realiza uma simulação.
 
 ## Funçionamento do Banco.sql
 
@@ -147,6 +147,3 @@ Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Front
 
 ### Concessão de Permissões
 - Atribui acessos mínimos a um usuário de aplicação, promovendo segurança ao limitar operações a leitura, inserção e atualização essenciais.
-
-## Conclusão
-O projeto integra modelagem UML com implementação com foco em seguraça, voltado a monitoramento agrícola baseado em drones.
