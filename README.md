@@ -5,41 +5,28 @@
 
 ## Sumário
 1. [Introdução](#introdução)
-2. [Proposta do Projeto](#proposta-do-projeto)
-3. [Objetivos](#objetivos)
-4. [Funcionalidades Mínimas](#funcionalidades-mínimas)
-5. [Requisitos de Segurança](#requisitos-de-segurança)
-6. [Metodologia de Desenvolvimento](#metodologia-de-desenvolvimento)
-7. [Modelagem UML](#modelagem-em-uml)
+2. [Objetivos](#objetivos)
+3. [Funcionalidades Mínimas](#funcionalidades-mínimas)
+4. [Requisitos de Segurança](#requisitos-de-segurança)
+5. [Metodologia de Desenvolvimento](#metodologia-de-desenvolvimento)
+6. [Diagramas UML](#diagramas-em-uml)
    - [Diagrama de Classes](#diagrama-de-classes)
    - [Diagrama de Sequência](#diagrama-de-sequência)
    - [Diagrama de Colaboração](#diagrama-de-colaboração)
    - [Diagrama de Estados](#diagrama-de-estados)
-8. [Princípios de Orientação a Objetos e CRC](#princípios-de-orientação-a-objetos-e-crc)
-9. [Resumo do SistemaDeMonitoramentoDeDrones.java](#resumo-do-sistemademonitoramentodedronesjava)
-10. [Resumo do Banco.sql](#resumo-do-bancosql)
-11. [Conclusão](#conclusão)
-12. [Referências](#referências)
+7. [Princípios de Orientação a Objetos e CRC](#princípios-de-orientação-a-objetos-e-crc)
+8. [Resumo do SistemaDeMonitoramentoDeDrones.java](#resumo-do-sistemademonitoramentodedronesjava)
+9. [Resumo do Banco.sql](#resumo-do-bancosql)
+10. [Conclusão](#conclusão)
+11. [Referências](#referências)
 
 ## Introdução
-Esse é um projeto de software para um sistema de monitoramento agrícola utilizando drones, desenvolvido como parte da disciplina de Projeto de Software na Universidade Presbiteriana Mackenzie, sob orientação do Prof. Dr. Rodrigo Silva. O projeto aborda desafios reais enfrentados por cooperativas rurais, onde o monitoramento manual de plantações é ineficiente, demorado e suscetível a erros. Utilizando drones para sobrevoos periódicos, o sistema coleta dados ambientais (como temperatura, umidade e detecção de pragas) e imagens, facilitando análises e decisões agronômicas.
+Esse é um projeto sobre um sistema de monitoramento agrícola utilizando drones. O projeto aborda desafios reais enfrentados por cooperativas rurais, onde o monitoramento manual de plantações é ineficiente, demorado e suscetível a erros. Utilizando drones para sobrevoos periódicos, o sistema coleta dados ambientais (como temperatura, umidade e detecção de pragas) e imagens, facilitando análises e decisões agronômicas.
 
-O sistema é modelado em UML, implementado em Java com integração a banco de dados relacional, e prioriza modularidade, reuso de código e validações para prevenir vulnerabilidades.
-
-## Proposta do Projeto
-Uma cooperativa rural deseja monitorar plantações usando drones para coletar dados e imagens. O sistema permite cadastro de entidades, agendamento de missões, registro de dados e geração de relatórios, com controles de segurança para evitar acessos indevidos, dados corrompidos ou operações arriscadas. Isso alinha com os princípios de DevSecOps e Security by Design, pensando em segurança desde a modelagem.
 
 ## Objetivos
 ### Geral
 Desenvolver um protótipo de software orientado a objeto seguro para monitoramento agrícola com drones, integrando modelagem UML, implementação Java e persistência de dados.
-
-### Específicos
-- Aplicar conceitos de Orientação a Objeto: encapsulamento, polimorfismo, herança, abstrações e interfaces .
-- Modelar interações com diagramas de sequência e colaboração .
-- Representar ciclos de vida com diagramas de estados, incluindo guardas de segurança .
-- Integrar diagramas com banco de dados relacional, prevenindo SQL Injection .
-- Definir responsabilidades via CRC, com foco em controladores seguros .
-
 
 ## Funcionalidades Mínimas
 - **Cadastro de Áreas Agrícolas**: Tamanho, localização e tipo de cultivo.
@@ -63,7 +50,7 @@ Adotamos uma abordagem incremental:
 4. Implementação em Java com abstrações e validações.
 5. Testes simulados no método Main.
 
-## Modelagem em UML
+## Diagramas em UML
 
 ### Diagrama de Classes
 Representa a estrutura estática, com classes, atributos, operações e relacionamentos. Usa abstrações e interfaces para contratos restritos e validação de parâmetros, prevenindo falhas.
@@ -92,7 +79,7 @@ Usando CRC , cada classe tem responsabilidades coesas:
 - **MissaoVoo**: Saber dados da missão; fazer validação e execução (colabora com Drone e DadosColetados).
 Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Fronteiras (Main para interações).
 
-## Resumo do SistemaDeMonitoramentoDeDrones.java
+## Funcionamento do SistemaDeMonitoramentoDeDrones.java
 
 ### Interface Autenticavel
 - Define um contrato para autenticação de usuários, garantindo que apenas credenciais válidas permitam acesso ao sistema.
@@ -100,55 +87,57 @@ Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Front
 ### Interface Validavel
 - Estabelece um padrão para validação de objetos, ajudando a assegurar que dados e estados sejam consistentes antes de operações críticas.
 
-### Classe Usuario (abstrata)
+### Classes
+
+#### Classe Usuario (abstrata)
 - Representa usuários genéricos do sistema, fornecendo mecanismos básicos para gerenciamento de credenciais e autenticação segura.
 
-### Classe Administrador (herda de Usuario)
+#### Classe Administrador (herda de Usuario)
 - Permite que administradores cadastrem áreas agrícolas e drones, além de gerarem relatórios, facilitando a administração e análise de dados.
 
-### Classe OperadorDrone (herda de Usuario)
+#### Classe OperadorDrone (herda de Usuario)
 - Habilita operadores a agendarem missões de voo, com verificações para evitar conflitos, promovendo eficiência operacional.
 
-### Classe AreaAgricola
+#### Classe AreaAgricola
 - Modela áreas agrícolas, armazenando informações essenciais para planejamento e monitoramento de cultivos.
 
-### Classe Drone
+#### Classe Drone
 - Representa drones, incluindo verificações de prontidão para voos, garantindo que equipamentos estejam aptos para missões.
 
-### Classe MissaoVoo (implementa Validavel)
+#### Classe MissaoVoo (implementa Validavel)
 - Gerencia missões de voo, validando condições e executando coletas de dados, otimizando o processo de monitoramento.
 
-### Classe DadosColetados (implementa Validavel)
+#### Classe DadosColetados (implementa Validavel)
 - Armazena dados ambientais coletados durante missões, com validações para manter a integridade das informações.
 
-### Classe Relatorio
+#### Classe Relatorio
 - Gera resumos de medições e voos, auxiliando na tomada de decisões agronômicas baseadas em dados recentes.
 
-### Classe ConnectionFactory
+#### Classe ConnectionFactory
 - Fornece conexões seguras ao banco de dados, facilitando a integração entre a aplicação e o armazenamento persistente.
 
-### Classe UsuarioDAO
+#### Classe UsuarioDAO
 - Lida com autenticação de usuários no banco de dados, promovendo acesso controlado e seguro.
 
-### Classe AreaAgricolaDAO
+#### Classe AreaAgricolaDAO
 - Gerencia o cadastro de áreas agrícolas no banco, assegurando persistência de dados geográficos e de cultivo.
 
-### Classe DroneDAO
+#### Classe DroneDAO
 - Cuida do registro e recuperação de drones e seus sensores, suportando o gerenciamento de frota.
 
-### Classe MissaoVooDAO
+#### Classe MissaoVooDAO
 - Administra o agendamento de missões e verificações de sobreposições, evitando conflitos operacionais.
 
-### Classe DadosColetadosDAO
+#### Classe DadosColetadosDAO
 - Registra dados coletados e imagens associadas, preservando evidências de monitoramentos.
 
-### Classe RelatorioDAO
+#### Classe RelatorioDAO
 - Extrai dados para relatórios, fornecendo insights sobre áreas específicas.
 
-### Classe Main
+#### Classe Main
 - Demonstra o fluxo do sistema através de simulações, ilustrando como componentes interagem em cenários reais.
 
-## Resumo do Banco.sql
+## Funçionamento do Banco.sql
 
 ### Criação do Banco de Dados
 - Estabelece o banco de dados principal, servindo como repositório central para todos os dados do sistema.
