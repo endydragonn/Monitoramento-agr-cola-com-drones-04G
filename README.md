@@ -73,7 +73,7 @@ Modela o ciclo de vida com estados, transições e guardas para segurança, alé
 
 <img width="2613" height="1614" alt="Diagrama_de_estados" src="https://github.com/user-attachments/assets/c5c63393-8e15-44b8-8059-81cef509c87e" />
 
-## Princípios de Orientação a Objetos e CRC
+## Princípios de Orientação a Objetos e Verificação Cíclica de Redundância (Cyclic Redundancy Check) ou CRC
 Usando CRC , cada classe tem responsabilidades coesas:
 - **Usuario**: Saber credenciais; fazer autenticação (controlador com validação).
 - **MissaoVoo**: Saber dados da missão; fazer validação e execução (colabora com Drone e DadosColetados).
