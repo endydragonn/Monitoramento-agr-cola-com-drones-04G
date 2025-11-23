@@ -44,11 +44,11 @@ Desenvolver um protótipo de software orientado a objeto seguro para monitoramen
 
 ## Metodologia de Desenvolvimento
 Adotamos uma abordagem incremental:
-1. Modelagem estática (classes) e dinâmica (sequência, colaboração, estados).
+1. Modelagem em diagramas estáticos (classes) e dinâmicos (sequência, colaboração, estados).
 2. Definição de responsabilidades via CRC (classes com propósitos coesos, colaborações seguras).
-3. Integração com dados relacionais.
+3. Integração com os dados relacionais.
 4. Implementação em Java com abstrações e validações.
-5. Testes simulados no método Main.
+5. Testes simulados no Main.
 
 ## Diagramas em UML
 
@@ -73,7 +73,7 @@ Modela o ciclo de vida com estados, transições e guardas para segurança, alé
 
 <img width="2613" height="1614" alt="Diagrama_de_estados" src="https://github.com/user-attachments/assets/c5c63393-8e15-44b8-8059-81cef509c87e" />
 
-## Princípios de Orientação a Objetos e Verificação Cíclica de Redundância (Cyclic Redundancy Check) ou CRC
+## Princípios de Orientação a Objetos e CRC
 Usando CRC , cada classe tem responsabilidades coesas:
 - **Usuario**: Saber credenciais; fazer autenticação (controlador com validação).
 - **MissaoVoo**: Saber dados da missão; fazer validação e execução (colabora com Drone e DadosColetados).
