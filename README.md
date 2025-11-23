@@ -23,37 +23,35 @@
 12. [Referências](#referências)
 
 ## Introdução
-Este documento detalha o projeto de software para um sistema de monitoramento agrícola utilizando drones, desenvolvido como parte da disciplina de Projeto de Software na Universidade Presbiteriana Mackenzie, sob orientação do Prof. Dr. Rodrigo Silva. O projeto aborda desafios reais enfrentados por cooperativas rurais no Brasil, onde o monitoramento manual de plantações é ineficiente, demorado e suscetível a erros. Utilizando drones para sobrevoos periódicos, o sistema coleta dados ambientais (como temperatura, umidade e detecção de pragas) e imagens, facilitando análises e decisões agronômicas.
-
-Inspirado nos materiais da disciplina, como as apostilas sobre UML (ex.: "APOSTILA - UML - SEQUENCIAL.pdf"), integração de diagramas ("Aula_07_Integração Inicial- Classes + Sequência + Dados .pdf"), classes abstratas e interfaces ("Aula_10_Classes_Abstratas_Interfaces.pdf"), diagramas de estados ("Aula_13_Diagrama de Estados.pdf"), responsabilidades OO e CRC ("Responsabilidade_OO_CRC_Segurança.pdf"), e diagramas de colaboração ("Aula_12_Diagrama_Colaboracao.pdf"), o projeto adota uma abordagem orientada a objetos (OO) com ênfase em segurança by design, conforme a atividade prática ("Atividade_Java_ALICE3_SEC.pdf"). Embora a atividade mencione Alice 3 para prototipação interativa (ex.: cena de herói protegendo uma fortaleza), adaptamos os conceitos OO e de segurança para o contexto agrícola, simulando "proteção" como monitoramento contra pragas.
+Esse é um projeto de software para um sistema de monitoramento agrícola utilizando drones, desenvolvido como parte da disciplina de Projeto de Software na Universidade Presbiteriana Mackenzie, sob orientação do Prof. Dr. Rodrigo Silva. O projeto aborda desafios reais enfrentados por cooperativas rurais, onde o monitoramento manual de plantações é ineficiente, demorado e suscetível a erros. Utilizando drones para sobrevoos periódicos, o sistema coleta dados ambientais (como temperatura, umidade e detecção de pragas) e imagens, facilitando análises e decisões agronômicas.
 
 O sistema é modelado em UML, implementado em Java com integração a banco de dados relacional, e prioriza modularidade, reuso de código e validações para prevenir vulnerabilidades.
 
 ## Proposta do Projeto
-Uma cooperativa rural deseja monitorar plantações usando drones para coletar dados e imagens. O sistema permite cadastro de entidades, agendamento de missões, registro de dados e geração de relatórios, com controles de segurança para evitar acessos indevidos, dados corrompidos ou operações arriscadas. Isso alinha com os princípios de DevSecOps e Security by Design, pensando em segurança desde a modelagem (como recomendado na "Atividade_Java_ALICE3_SEC.pdf").
+Uma cooperativa rural deseja monitorar plantações usando drones para coletar dados e imagens. O sistema permite cadastro de entidades, agendamento de missões, registro de dados e geração de relatórios, com controles de segurança para evitar acessos indevidos, dados corrompidos ou operações arriscadas. Isso alinha com os princípios de DevSecOps e Security by Design, pensando em segurança desde a modelagem.
 
 ## Objetivos
 ### Geral
-Desenvolver um protótipo de software OO seguro para monitoramento agrícola com drones, integrando modelagem UML, implementação Java e persistência de dados.
+Desenvolver um protótipo de software orientado a objeto seguro para monitoramento agrícola com drones, integrando modelagem UML, implementação Java e persistência de dados.
 
 ### Específicos
-- Aplicar conceitos de OO: encapsulamento, polimorfismo, herança, abstrações e interfaces ("Aula_10_Classes_Abstratas_Interfaces.pdf").
-- Modelar interações com diagramas de sequência e colaboração ("APOSTILA - UML - SEQUENCIAL.pdf" e "Aula_12_Diagrama_Colaboracao.pdf").
-- Representar ciclos de vida com diagramas de estados, incluindo guardas de segurança ("Aula_13_Diagrama de Estados.pdf").
-- Integrar diagramas com banco de dados relacional, prevenindo SQL Injection ("Aula_07_Integração Inicial- Classes + Sequência + Dados .pdf").
-- Definir responsabilidades via CRC, com foco em controladores seguros ("Responsabilidade_OO_CRC_Segurança.pdf").
-- Simular interações seguras, adaptando a prototipação de Alice 3 para código Java.
+- Aplicar conceitos de Orientação a Objeto: encapsulamento, polimorfismo, herança, abstrações e interfaces .
+- Modelar interações com diagramas de sequência e colaboração .
+- Representar ciclos de vida com diagramas de estados, incluindo guardas de segurança .
+- Integrar diagramas com banco de dados relacional, prevenindo SQL Injection .
+- Definir responsabilidades via CRC, com foco em controladores seguros .
+
 
 ## Funcionalidades Mínimas
 - **Cadastro de Áreas Agrícolas**: Tamanho, localização e tipo de cultivo.
 - **Cadastro de Drones**: ID, sensores disponíveis e status.
 - **Agendamento de Missões de Voo**: Data, área e sensores, com validação de sobreposições.
-- **Registro de Dados Coletados**: Imagens e valores simulados (temperatura, umidade, pragas).
+- **Registro de Dados Coletados**: Imagens e valores simulados .
 - **Relatórios Básicos**: Últimas medições e voos realizados.
 
 ## Requisitos de Segurança
-- **Controle de Acesso**: Diferenciado (administrador para cadastros/relatórios; operador para agendamentos).
-- **Validações**: Impedir missões sobrepostas; checklist antes de voos (bateria ≥20%, sensores funcionando).
+- **Controle de Acesso**: Diferenciado .
+- **Validações**: Impedir missões sobrepostas; checklist antes de voos .
 - **Tratamento de Dados**: Evitar entradas inválidas/corrompidas via métodos com validação.
 - **Persistência Segura**: Uso de PreparedStatements para prevenir SQL Injection.
 - **Estados Seguros**: Guardas em transições para evitar estados inválidos (ex.: executar missão sem autenticação).
@@ -70,28 +68,28 @@ Adotamos uma abordagem incremental:
 Os diagramas feito em uml se complementam para servir como guia para o sistema.
 
 ### Diagrama de Classes
-Representa a estrutura estática, com classes, atributos, operações e relacionamentos. Usa abstrações (classes abstratas como Usuario) e interfaces (Autenticavel, Validavel) para contratos restritos e validação de parâmetros, prevenindo falhas ("Aula_10_Classes_Abstratas_Interfaces.pdf"). Exemplos: herança para polimorfismo em usuários; associações para missões.
+Representa a estrutura estática, com classes, atributos, operações e relacionamentos. Usa abstrações (classes abstratas como Usuario) e interfaces (Autenticavel, Validavel) para contratos restritos e validação de parâmetros, prevenindo falhas . Exemplos: herança para polimorfismo em usuários; associações para missões.
 
 <img width="2613" height="1614" alt="Diagrama_de_classe" src="https://github.com/user-attachments/assets/18b4b6ce-d67a-47b4-92b3-9b9277e6326c" />
 
 ### Diagrama de Sequência
-Mostra interações temporais entre objetos para agendamento e execução de missões ("APOSTILA - UML - SEQUENCIAL.pdf"). Inclui atores (OperadorDrone), objetos e mensagens com alternativas para validações de segurança.
+Mostra interações temporais entre objetos para agendamento e execução de missões . Inclui atores (OperadorDrone), objetos e mensagens com alternativas para validações de segurança.
 
 <img width="2613" height="1614" alt="Diagrama_de_sequencia" src="https://github.com/user-attachments/assets/bfadba0b-8d2c-47f0-bb35-afc732847814" />
 
 ### Diagrama de Sequência + Colaboração
-Complementa a sequência, focando em estrutura de links e mensagens numeradas ("Aula_12_Diagrama_Colaboracao.pdf"). Enfatiza segurança na troca de mensagens, validando dados para evitar exposições.
+Complementa a sequência, focando em estrutura de links e mensagens numeradas . Enfatiza segurança na troca de mensagens, validando dados para evitar exposições.
 
 <img width="2613" height="1614" alt="Diagrama_Integração_ Sequencia_Colaboração" src="https://github.com/user-attachments/assets/69def96e-db48-478b-98aa-207a2651b955" />
 
 
 ### Diagrama de Estados
-Modela o ciclo de vida de MissaoVoo, com estados, transições e guardas para segurança ("Aula_13_Diagrama de Estados.pdf"). Prevê estados inválidos (ex.: Executando sem checklist) usando UMLsec.
+Modela o ciclo de vida de MissaoVoo, com estados, transições e guardas para segurança . Prevê estados inválidos (ex.: Executando sem checklist) usando UMLsec.
 
 <img width="2613" height="1614" alt="Diagrama_de_estados" src="https://github.com/user-attachments/assets/c5c63393-8e15-44b8-8059-81cef509c87e" />
 
 ## Princípios de Orientação a Objetos e CRC
-Usando CRC ("Responsabilidade_OO_CRC_Segurança.pdf"), cada classe tem responsabilidades coesas:
+Usando CRC , cada classe tem responsabilidades coesas:
 - **Usuario**: Saber credenciais; fazer autenticação (controlador com validação).
 - **MissaoVoo**: Saber dados da missão; fazer validação e execução (colabora com Drone e DadosColetados).
 Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Fronteiras (Main para interações).
