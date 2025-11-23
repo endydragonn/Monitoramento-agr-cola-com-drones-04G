@@ -104,10 +104,10 @@ Papéis: Entidades (AreaAgricola), Controladores (DAOs com sanitização), Front
 #### Classe Drone
 - Representa drones, incluindo verificações de prontidão para voos, garantindo que equipamentos estejam aptos para missões.
 
-#### Classe MissaoVoo (implementa Validavel)
+#### Classe MissaoVoo 
 - Gerencia missões de voo, validando condições e executando coletas de dados, otimizando o processo de monitoramento.
 
-#### Classe DadosColetados (implementa Validavel)
+#### Classe DadosColetados 
 - Armazena dados ambientais coletados durante missões, com validações para manter a integridade das informações.
 
 #### Classe Relatorio
