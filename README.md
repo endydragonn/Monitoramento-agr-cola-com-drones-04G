@@ -26,7 +26,7 @@ Esse é um projeto sobre um sistema de monitoramento agrícola utilizando drones
 
 ## Objetivos
 ### Geral
-Desenvolver um protótipo de software orientado a objeto seguro para monitoramento agrícola com drones, integrando modelagem UML, implementação Java e persistência de dados.
+Desenvolver um protótipo de software orientado a objeto seguro para monitoramento agrícola com drones, integrando modelagem em UML, com a implementação em Java e persistência de dados.
 
 ## Funcionalidades Mínimas
 - **Cadastro de Áreas Agrícolas**: Tamanho, localização e tipo de cultivo.
