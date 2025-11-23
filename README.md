@@ -17,8 +17,8 @@
    - [Diagrama de Estados](#diagrama-de-estados)
    - [Integração com Banco de Dados (Modelo ER)](#integração-com-banco-de-dados-modelo-er)
 8. [Princípios de Orientação a Objetos e CRC](#princípios-de-orientação-a-objetos-e-crc)
-9. [Sistema De Monitoramento De Drones](##-Resumo-do-SistemaDeMonitoramentoDeDrones.java)
-10. [Banco de dados](##-Resumo-do-Banco.sql)
+9. [Sistema De Monitoramento De Drones](##Resumo-do-SistemaDeMonitoramentoDeDrones.java)
+10. [Banco de dados](##Resumo-do-Banco.sql)
 11. [Conclusão](#conclusão)
 12. [Referências](#referências)
 
